@@ -1,0 +1,25 @@
+{
+  "name": "linkshortner-2",
+  "version": "1.0.0",
+  "description": "Shortens a Link to your preferred or random ID.",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remadisson/Linkshortner_v2.git"
+  },
+  "author": "remadisson",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/remadisson/Linkshortner_v2/issues"
+  },
+  "homepage": "https://github.com/remadisson/Linkshortner_v2#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "monk": "^7.3.1"
+  }
+}
