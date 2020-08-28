@@ -9,8 +9,6 @@ const clear = require('clear');
 const inputManager = require('./moduels/input');
 const database = require('./moduels/db');
 
-const no_id = ["links", "users"]
-
 // Make it looq butiful
 const chalk = require('chalk');
 
@@ -57,6 +55,5 @@ app.listen(8080, () => {
     inputManager.init();
 });
 
-module.exports = {no_id};
 
 

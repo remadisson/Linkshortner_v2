@@ -1,5 +1,6 @@
 const readline = require('readline');
 const chalk = require('chalk');
+const clear = require('clear');
 const no_id = require('./../server').no_id;
 const links = require('./../server').links;
 
@@ -12,7 +13,7 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-const commands = ["help", "link", "user", "db"];
+const commands = ["help", "link", "user", "db", "clear"];
 
 let send = false;
 module.exports.init = async() => {
@@ -28,8 +29,8 @@ module.exports.init = async() => {
                     args.push(raw.split(" ")[i]);
                 }
 
-                if(!commands.includes(command)){
-                    error(" `" + input.toString() + "` could not be found!");
+                if(!commands.includes(command) && (command.length != 0 || command.toString().toLowerCase().trim() != '')){
+                    error("`" + input.toString() + "` could not be found!");
                 }
 
             await doCommandCycle(input, command, args);
@@ -41,6 +42,13 @@ module.exports.init = async() => {
 
 async function doCommandCycle(input, command, args){
     switch(command){
+        case "clear": {
+            clear()
+            console.log(chalk.magenta(">> Linkshortner-2 ready! <<"));
+            console.log(chalk.cyanBright("> Use 'help' for more information."));
+            return;
+        }
+
         case "help":{
             sendMessage(" Help for LinkShortner", chalk.greenBright);
             sendMessage("> help", chalk.greenBright);
@@ -66,6 +74,12 @@ async function doCommandCycle(input, command, args){
                             if(args.length == 1){
 
                                 const newlink = await question.redirect.addLink(false);
+
+                                if(newlink == false){
+                                    error('Command aborted!');
+                                    return;
+                                }
+
                                 if((await database.redirect.linkExists(newlink.id))){
                                     error('An redirect with this ID already exists!');
                                     return;
@@ -80,6 +94,11 @@ async function doCommandCycle(input, command, args){
                                 if(args[1].toString().toLowerCase() == ("-f")){
                                     const newlink = await question.redirect.addLink(true);
                                     
+                                    if(newlink == false){
+                                        error('Command aborted!');
+                                        return;
+                                    }
+
                                     if((await database.redirect.linkExists(newlink.id))){
                                         error('An redirect with this ID already exists!');
                                         return;
@@ -102,6 +121,12 @@ async function doCommandCycle(input, command, args){
                         case "remove":{
                             if(args.length == 1){                                
                                 const removelink = await question.redirect.removeLink();
+                                
+                                if(newlink == false){
+                                    error('Command aborted!');
+                                    return;
+                                }
+
                                 await database.redirect.removeLink(removelink).then(callback => {
                                     error(removelink + " has been deleted!");
                                 });
