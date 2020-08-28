@@ -2,7 +2,12 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const monk = require('monk');
+const figlet = require('figlet');
+const clear = require('clear');
+
+// Import classes
+const inputManager = require('./moduels/input');
+const database = require('./moduels/db');
 
 const no_id = ["links", "users"]
 
@@ -13,20 +18,18 @@ const chalk = require('chalk');
 app.use(express.json());
 app.use(cors());
 
-// Initialize db instances
-const db = monk('localhost/linkshortner_2'); // TODO CHANGE LATER ON
-const links = db.get('links');
-const users = db.get('users'); // TODO LATER IN THE MISSION xD
 
 app.get('/', (req, res) => {
     res.redirect('https://www.remadyreturns.de/');
 });
 
 app.get('/links', async(req, res) => {
-    let callback = await links.find().then(callback => callback);
-    
-    if(callback != null && callback > 0){
-        res.json(callback);
+    const callback = await database.redirect.getLinks();
+
+    if(callback != null && callback.length > 0){
+        for(var entry in callback){
+            res.json(callback[entry]);
+        }
     } else {
         res.json({
             status: 204,
@@ -36,6 +39,24 @@ app.get('/links', async(req, res) => {
 
 });
 
-app.listen(8080, () => {
-    console.log(chalk.yellow("Linkshortner-2 ready!"));
+app.get('/*', async(req, res) => {
+    const url = req.originalUrl.substr(1, req.originalUrl.length);
+    
+    const redirect = await database.redirect.getLink(url);
+    if(redirect != null){
+        res.redirect(redirect.url);
+    } else {
+        res.status(404).redirect(`https://remadyreturns.de/${url}`);
+    }
 });
+
+app.listen(8080, () => {
+    clear();
+    console.log(chalk.magentaBright(figlet.textSync('LS2', {horizontalLayout: 'full'})));
+    console.log(chalk.magenta(">> Linkshortner-2 ready! <<"));
+    inputManager.init();
+});
+
+module.exports = {no_id};
+
+
