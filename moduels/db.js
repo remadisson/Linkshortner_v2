@@ -1,9 +1,15 @@
 const monk = require('monk');
 const clear = require('clear');
+const dotenv = require('dotenv');
 
-const db = monk('localhost/linkshortner_2'); // TODO CHANGE LATER ON
+dotenv.config()
+const db = monk(process.env.mongo_url_rainbow);
 const link = db.get('links');
 const user = db.get('users'); // TODO LATER IN THE MISSION xD
+
+db.catch(error => {
+    console.log(error);
+});
 
 module.exports.redirect = {
     getLinks: () => {

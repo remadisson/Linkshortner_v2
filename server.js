@@ -25,14 +25,13 @@ app.get('/links', async(req, res) => {
     const callback = await database.redirect.getLinks();
 
     if(callback != null && callback.length > 0){
-        for(var entry in callback){
-            res.json(callback[entry]);
-        }
+        res.json(callback);
+
     } else {
         res.json({
             status: 204,
             message: "There are no redirects yet! >:(",
-        })
+        });
     }
 
 });

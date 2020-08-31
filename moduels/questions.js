@@ -18,14 +18,13 @@ module.exports.redirect = {
         console.log(chalk.red('>> Make sure you have at least 6 chars in your id!'));
         link = await require('./questions').redirect.addLink();
        });
-       if(link.id == false) return false;
-
-       if(link.url == false) return false;
+       
+       if(link.id == false || link.url == false) return false;
        if(link.url != null) return link;
        link.url = await ask(chalk.blue('> Input the URL of the redirect: '));
        if(link.url == false) return false;
 
-    return link;
+         return link;
     },
 
     removeLink: async() => {

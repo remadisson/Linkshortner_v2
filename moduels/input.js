@@ -74,13 +74,13 @@ async function doCommandCycle(input, command, args){
                             if(args.length == 1){
 
                                 const newlink = await question.redirect.addLink(false);
-
+                                
                                 if(newlink == false){
                                     error('Command aborted!');
                                     return;
                                 }
 
-                                if((await database.redirect.linkExists(newlink.id))){
+                                if(await database.redirect.linkExists(newlink.id)){
                                     error('An redirect with this ID already exists!');
                                     return;
                                 }
@@ -122,7 +122,7 @@ async function doCommandCycle(input, command, args){
                             if(args.length == 1){                                
                                 const removelink = await question.redirect.removeLink();
                                 
-                                if(newlink == false){
+                                if(removelink == false){
                                     error('Command aborted!');
                                     return;
                                 }
