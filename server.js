@@ -6,8 +6,8 @@ const figlet = require('figlet');
 const clear = require('clear');
 
 // Import classes
-const inputManager = require('./moduels/input');
-const database = require('./moduels/db');
+const inputManager = require('./modules/input');
+const database = require('./modules/db');
 
 // Make it looq butiful
 const chalk = require('chalk');

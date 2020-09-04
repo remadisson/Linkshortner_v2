@@ -1,8 +1,8 @@
 const readline = require('readline');
 const chalk = require('chalk');
 const clear = require('clear');
-const no_id = require('./../server').no_id;
-const links = require('./../server').links;
+const no_id = require('../server').no_id;
+const links = require('../server').links;
 
 const database = require('./db');
 const question = require('./questions');
