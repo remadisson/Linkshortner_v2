@@ -3,7 +3,7 @@ const clear = require('clear');
 const dotenv = require('dotenv');
 
 dotenv.config()
-const db = monk(process.env.mongo_url_rainbow);
+const db = monk(process.env.mongo_url_remadisson);
 const link = db.get('links');
 const user = db.get('users'); // TODO LATER IN THE MISSION xD
 
@@ -37,7 +37,8 @@ module.exports.redirect = {
     },
 
     Link: (id, url) => {
-        return { id: id, url:url, date: new Date()};
+        //availability, userid and active is for future purposes
+        return {id: id, url:url, availability: undefined, userid: undefined, active: true, date: new Date()};
     },
 
     clearDatabase: () => {

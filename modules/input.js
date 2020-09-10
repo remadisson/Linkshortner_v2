@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const clear = require('clear');
 const no_id = require('../server').no_id;
 const links = require('../server').links;
+const random = require('./random');
 
 const database = require('./db');
 const question = require('./questions');
@@ -52,7 +53,7 @@ async function doCommandCycle(input, command, args){
         case "help":{
             sendMessage(" Help for LinkShortner", chalk.greenBright);
             sendMessage("> help", chalk.greenBright);
-            sendMessage("> link [add]/remove/list/info [-f] <id>", chalk.greenBright);
+            sendMessage("> link [add]/remove/list/info [-f, -r] <id>", chalk.greenBright);
             sendMessage("> user add/remove/list", chalk.greenBright);
             sendMessage("> db", chalk.greenBright);
             return;
@@ -63,7 +64,7 @@ async function doCommandCycle(input, command, args){
             switch(args.length){
                 default:
                 case 0:{
-                    sendMessage("link [add]/remove/list/info [-f] <id>", chalk.greenBright);
+                    sendMessage("link [add]/remove/list/info [-f, -r] <id>", chalk.greenBright);
                     return;
                 }
 
@@ -108,6 +109,19 @@ async function doCommandCycle(input, command, args){
                                     await database.redirect.addLink(link).then(callback => {
                                         sendMessage(callback.id + " has been added!", chalk.blue);
                                     });
+
+                                } else if(args[1].toString().toLowerCase() == ('-r')) {
+                                    const newurl = await question.redirect.askWithRandomID();
+
+                                    if(newurl == false){
+                                        error('Command aborted!');
+                                        return;
+                                    }
+
+                                    const link = database.redirect.Link(random.randomID(6), newurl);
+                                    await database.redirect.addLink(link).then(callback => {
+                                            sendMessage(callback.id + " (" + chalk.greenBright(callback.url) +") has beend added!", chalk.blue);
+                                    })
 
                                 } else {
                                     error(" `" + input.toString() + "` could not be found!");
@@ -188,7 +202,7 @@ async function doCommandCycle(input, command, args){
                         }
 
                         default:{
-                            sendMessage("link [add]/remove/list/info [-f] <id>", chalk.greenBright);
+                            sendMessage("link [add]/remove/list/info [-f, -r] <id>", chalk.greenBright);
                             return;
                         }
                     }
@@ -203,7 +217,7 @@ async function doCommandCycle(input, command, args){
 function sendHelp(command){
     switch(command.toLowerCase()){
         case "link": {
-            sendMessage("link [add]/remove/list/info [-f] <id>", chalk.greenBright);
+            sendMessage("link [add]/remove/list/info [-f, -r] <id>", chalk.greenBright);
             return;
         }
 

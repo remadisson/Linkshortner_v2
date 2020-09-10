@@ -1,7 +1,6 @@
 const chalk = require('chalk');
 const readline = require('readline');
-const databsae = require('./db');
-const { Server } = require('http');
+const database = require('./db');
 const no_id = module.exports.no_id = ["links", "users"];
 
 const rl = readline.createInterface({
@@ -28,19 +27,39 @@ module.exports.redirect = {
     },
 
     removeLink: async() => {
-        var id = {};
+        var id = undefined;
         id = await ask(chalk.blue('Input the ID of the redirect, you want to delete: '));
 
         if(id == false){
             return false;
         }
 
-        if(!(await databsae.redirect.linkExists(id))){
+        if(!(await database.redirect.linkExists(id))){
             console.log(chalk.red('> The ID ') + chalk.yellow(id) + chalk.red(' could not been found! Try again!'));
-            await this.redirect.removeLink();
+
+            if(id == false){
+                return false;
+            }
+
+           id = await this.redirect.removeLink();
         }
 
         return id;
+    },
+
+    askWithRandomID: async() => {
+        var url = undefined;
+        url = await ask(chalk.blue('> Input the URL of the redirect: '));
+
+        if(url == false){
+            return false;
+        }
+
+        if(url == null){
+            url = await this.redirect.askWithRandomID();
+        }
+
+        return url;
     }
 }
 
@@ -56,7 +75,7 @@ async function askID(question, force){
 
             if(input && input.length > 0 && input.toString() != ''){
                 if((input.length > 5 || force) && !no_id.includes(input.toString().toLowerCase().trim())){
-                    callback = input.toString().trim();
+                    callback = input.toString().toLowerCase().trim();
                     resolve();
                 } else {
                     reject();
@@ -74,13 +93,12 @@ async function ask(question){
     var callback = undefined;
     await new Promise((resolve, reject) => {
         rl.question(question, (input) => {
-
             if(input.toString().toLowerCase().trim() == ':a'){
                 callback = false;
                 resolve();
             }
 
-            if(input && input.length > 0 && input.toString() != ''){
+            if(input && input.length > 0 && input.toString() != '' && input.toString().toLowerCase().trim() != ':a'){
                 callback = input.toString().toLowerCase().trim();
                 resolve()
             } else {
