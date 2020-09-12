@@ -37,8 +37,8 @@ module.exports.redirect = {
     },
 
     Link: (id, url) => {
-        //availability, userid and active is for future purposes
-        return {id: id, url:url, availability: undefined, userid: undefined, active: true, date: new Date()};
+        //availability, userid and active, categorie is for future purposes
+        return {id: id, url:url, availability: undefined, userid: undefined, active: true, categorie: undefined, date: new Date()};
     },
 
     clearDatabase: () => {

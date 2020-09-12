@@ -39,7 +39,7 @@ app.get('/links', async(req, res) => {
 app.get('/*', async(req, res) => {
     const url = req.originalUrl.substr(1, req.originalUrl.length);
     
-    const redirect = await database.redirect.getLink(url);
+    const redirect = await database.redirect.getLink(url.toLowerCase());
     if(redirect != null){
         res.redirect(redirect.url);
     } else {
