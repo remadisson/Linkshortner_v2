@@ -28,7 +28,7 @@ module.exports.redirect = {
 
     removeLink: async() => {
         var id = undefined;
-        id = await ask(chalk.blue('Input the ID of the redirect, you want to delete: '));
+        id = await askID(chalk.blue('Input the ID of the redirect, you want to delete: '));
 
         if(id == false){
             return false;
@@ -99,7 +99,7 @@ async function ask(question){
             }
 
             if(input && input.length > 0 && input.toString() != '' && input.toString().toLowerCase().trim() != ':a'){
-                callback = input.toString().toLowerCase().trim();
+                callback = input.toString().trim();
                 resolve()
             } else {
                 reject();
